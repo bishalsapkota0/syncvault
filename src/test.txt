@@ -1,5 +1,8 @@
-Test File 1
-This is a test file 1
-File test 
-File 1
-
+SyncVault test file.
+This line repeats.
+This line repeats.
+This line repeats.
+Chunking splits files into pieces.
+Each piece gets a hash.
+Same pieces should get the same hash.
+EOF
