@@ -3,42 +3,19 @@
 #include <fstream>
 #include <unordered_map>
 #include <vector>
-#include <deque>
-
+#include "common/RollingHash.h"
+#include "common/Hasher.h"
 namespace fs = std::filesystem;
 
 struct Chunk {
     std::string hashData;
     std::size_t chunkSize;
-    std::size_t offset;   // where this chunk starts in the file
+    std::size_t offset;  
 };
 
-const std::size_t CHUNK_SIZE = 8;   // how many bytes we read from the file at a time
-const std::size_t WINDOW     = 4;   // rolling hash looks at the last 4 bytes
-const std::size_t MIN_CHUNK  = 4;   // never cut before a chunk has 4 bytes
-const std::size_t MAX_CHUNK  = 16;  // always cut when a chunk reaches 16 bytes
-const unsigned int DIVISOR   = 8;   // cut when window sum % 8 == 0
-
-// Rolling hash: 
-//fixed size sliding window algorithm 
-struct RollingHash {
-    std::deque<unsigned char> window;
-    unsigned int sum = 0;
-
-    void add(unsigned char b) {
-        window.push_back(b);
-        sum += b;
-        if (window.size() > WINDOW) {
-            sum -= window.front();
-            window.pop_front();
-        }
-    }
-    // true when the window is full and the content says "cut here"
-    bool isCutPoint() const {
-        return window.size() == WINDOW && sum % DIVISOR == 0;
-    }
-};
-
+const std::size_t CHUNK_SIZE = 8; 
+const std::size_t MIN_CHUNK  = 4;   
+const std::size_t MAX_CHUNK  = 16;  
 int main() {
     std::vector<char> buffer(CHUNK_SIZE);
     fs::path p = "test.txt";
