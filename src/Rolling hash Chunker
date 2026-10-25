@@ -1,0 +1,37 @@
+STEPS :- (ROLLING HASH CHUNKER)
+
+Setup:
+   W  = window size        (e.g. 4)
+   B  = base               (e.g. 31)
+   M  = big prime          (e.g. 1,000,000,007)
+   D  = cut divisor        (e.g. 8)
+   highPower = B^(W-1) % M   ← weight of the leftmost (MSB) char
+
+① Calculate hash for 1st window in file:
+      hash = 0
+      for each of the first W bytes c:
+          hash = (hash × B + c) % M
+          add c to current chunk
+
+② Repeat the following :- (until file ends)
+
+   i)   If  chunk size ≥ MIN  and  hash % D == 0
+        OR  chunk size ≥ MAX
+        then CUT:
+             • SHA-256 the current chunk
+             • save it (hash, size, offset)
+             • start a new empty chunk
+
+   ii)  Subtract leftmost (MSB) char from hash:
+             hash = (hash − old × highPower) % M
+             (if hash < 0, add M)
+
+   iii) Shift entire hash by 1 unit to left:
+             hash = (hash × B) % M
+
+   iv)  Add new character to the window:
+             hash = (hash + new) % M
+             add new to current chunk
+
+③ When file ends:
+      if current chunk is not empty → CUT it (last chunk)
