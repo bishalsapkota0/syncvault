@@ -1,7 +1,6 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
-#include <openssl/evp.h>
 #include <unordered_map>
 #include <vector>
 #include <deque>
@@ -20,20 +19,6 @@ const std::size_t MIN_CHUNK  = 4;   // never cut before a chunk has 4 bytes
 const std::size_t MAX_CHUNK  = 16;  // always cut when a chunk reaches 16 bytes
 const unsigned int DIVISOR   = 8;   // cut when window sum % 8 == 0
 
-// SHA-256 fingerprint of a chunk, as a 64-character hex string
-std::string sha256(const char* data, std::size_t length) {
-    unsigned char hash[EVP_MAX_MD_SIZE];
-    unsigned int hashLength = 0;
-    EVP_Digest(data, length, hash, &hashLength, EVP_sha256(), nullptr);
-    std::string hex;
-    const char* digits = "0123456789abcdef";
-    for (unsigned int i = 0; i < hashLength; i++) {
-        hex += digits[hash[i] >> 4];
-        hex += digits[hash[i] & 0x0F];
-    }
-    return hex;
-}
-
 // Rolling hash: 
 //fixed size sliding window algorithm 
 struct RollingHash {
@@ -48,7 +33,6 @@ struct RollingHash {
             window.pop_front();
         }
     }
-
     // true when the window is full and the content says "cut here"
     bool isCutPoint() const {
         return window.size() == WINDOW && sum % DIVISOR == 0;
