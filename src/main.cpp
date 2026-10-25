@@ -18,21 +18,6 @@ int main() {
               << " |Chunk Size" << c.chunkSize
               << " |Chunk Hash String : " << c.hashData.substr(0, 12) << "...\n";
     }
-    
-    std::unordered_map<std::string, int> seen;
-    std::size_t savedBytes = 0;
-    for (const auto& chunk : dataChunks) {
-        if (seen.find(chunk.hashData) == seen.end()) {
-            seen[chunk.hashData] = 1;
-        }
-        else {
-            seen[chunk.hashData]++;
-            savedBytes += chunk.chunkSize;
-        }
-    }
-    std::cout << "Total chunks:  " << dataChunks.size() << "\n";
-    std::cout << "Unique chunks: " << seen.size() << "\n";
-    std::cout << "Bytes saved by dedup: " << savedBytes << "\n";
 
     return 0;
 }
