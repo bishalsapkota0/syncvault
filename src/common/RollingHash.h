@@ -4,10 +4,10 @@
 #include <cstdint>
 
 struct RollingHash {
-    static constexpr std::size_t   WINDOW  = 4;
+    static constexpr std::size_t   WINDOW  = 48; //48bytes
     static constexpr std::uint64_t BASE    = 31;
     static constexpr std::uint64_t MOD     = 1000000007;
-    static constexpr std::uint64_t DIVISOR = 8;
+    static constexpr std::uint64_t DIVISOR = 8192;//8KB
 
     std::deque<unsigned char> window;
     std::uint64_t hash = 0;

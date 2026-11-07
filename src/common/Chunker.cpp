@@ -4,9 +4,9 @@
 #include <fstream>
 
 namespace {
-    const std::size_t READ_SIZE = 8;   
-    const std::size_t MIN_CHUNK = 4;
-    const std::size_t MAX_CHUNK = 16;
+    const std::size_t READ_SIZE = 65536; //64KB  
+    const std::size_t MIN_CHUNK = 2048;  //2KB
+    const std::size_t MAX_CHUNK = 65536; //64KB
 }
 
 std::vector<Chunk> chunkFile(const std::filesystem::path& p) {
