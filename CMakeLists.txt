@@ -16,5 +16,13 @@ add_executable(syncvault
   src/common/Chunker.cpp
   src/common/Dedup.cpp
 )
+add_executable(bench
+  src/bench.cpp
+  src/common/Hasher.cpp
+  src/common/RollingHash.cpp
+  src/common/Chunker.cpp
+  src/common/Dedup.cpp
+)
+target_link_libraries(bench PRIVATE OpenSSL::Crypto)
 
 target_link_libraries(syncvault PRIVATE OpenSSL::Crypto)
